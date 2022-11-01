@@ -1,91 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Binural Beats</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <div class="app-container">
-            <div class="left">
-                <div class="left-container">
-                    <div class="blur-element"></div>
-                    <div class="left-items">
-                        <div class="input">
-                            <div class="input-container">
-                                <input type="number" id="leftFrequency" placeholder="Enter Left Frequency" />
-                            </div>
-                            <div class="input-container">
-                                <input type="number" id="RightFrequency" placeholder="Enter Right Frequency" />
-                            </div>
-                        </div>
-                        <div class="controls">
-                            <button id="start-left" onClick=startLeft()>Start Left</button>
-                            <button id="stop-btn" onClick=stop()>Stop</button>
-                            <button id="start-right" onClick=startRight()>Start Right</button>
-                        </div>
-                    </div>
+      <div class="app-container">
+        <div class="left">
+          <div class="left-container">
+            <div class="blur-element"></div>
+            <div class="left-items">
+              <div class="input">
+                <div class="input-container">
+                  <input
+                    type="number"
+                    id="leftFrequency"
+                    placeholder="Enter Left Frequency"
+                  />
                 </div>
+                <div class="input-container">
+                  <input
+                    type="number"
+                    id="RightFrequency"
+                    placeholder="Enter Right Frequency"
+                  />
+                </div>
+              </div>
+              <div class="controls">
+                <button id="start-left" onClick="startLeft()">
+                  Start Left
+                </button>
+                <button id="stop-btn" onClick="stop()">Stop</button>
+                <button id="start-right" onClick="startRight()">
+                  Start Right
+                </button>
+              </div>
             </div>
-            <div class="right">
-
-            </div>
+          </div>
         </div>
+        <div class="right"></div>
+      </div>
     </div>
     <script>
-        var audioCtx = new AudioContext();
+      var audioCtx = new AudioContext();
 
-        var oscillator = audioCtx.createOscillator();
-        function startLeft() {
-            var panner = audioCtx.createStereoPanner();
-            oscillator.type = 'sine';
-            oscillator.frequency.value = document.getElementById("leftFrequency").value; // value in hertz
-            oscillator.connect(panner);
-            panner.connect(audioCtx.destination);
-            try {
-                oscillator.start();
-            }
-            catch (err) {
+      var oscillator = audioCtx.createOscillator();
+      function startLeft() {
+        var panner = audioCtx.createStereoPanner();
+        oscillator.type = "sine";
+        oscillator.frequency.value =
+          document.getElementById("leftFrequency").value; // value in hertz
+        oscillator.connect(panner);
+        panner.connect(audioCtx.destination);
+        try {
+          oscillator.start();
+        } catch (err) {}
+        panner.pan.value = -1;
+        document.querySelector("#leftFrequency").oninput = function () {
+          oscillator.frequency.value = +this.value;
+        };
+        document.getElementById("start-left").setAttribute("disabled", "");
+      }
 
-            }
-            panner.pan.value = -1;
-            document.querySelector("#leftFrequency").oninput = function () {
-                oscillator.frequency.value = +this.value;
-            };
-            document.getElementById("start-left").setAttribute("disabled", "");
-        }
-
-        var oscillator1 = audioCtx.createOscillator();
-        function startRight() {
-            var panner = audioCtx.createStereoPanner();
-            oscillator1.type = 'sine';
-            oscillator1.frequency.value = document.getElementById("RightFrequency").value; // value in hertz
-            oscillator1.connect(panner);
-            panner.connect(audioCtx.destination);
-            try {
-                oscillator1.start();
-            }
-            catch (err) {
-
-            }
-            panner.pan.value = 1;
-            document.querySelector("#RightFrequency").oninput = function () {
-                oscillator1.frequency.value = +this.value;
-            };
-            document.getElementById("start-right").setAttribute("disabled", "");
-        }
-        function stop() {
-            oscillator.disconnect();
-            oscillator1.disconnect();
-            document.getElementById("start-left").removeAttribute("disabled", "");
-            document.getElementById("start-right").removeAttribute("disabled", "");
-        }
+      var oscillator1 = audioCtx.createOscillator();
+      function startRight() {
+        var panner = audioCtx.createStereoPanner();
+        oscillator1.type = "sine";
+        oscillator1.frequency.value =
+          document.getElementById("RightFrequency").value; // value in hertz
+        oscillator1.connect(panner);
+        panner.connect(audioCtx.destination);
+        try {
+          oscillator1.start();
+        } catch (err) {}
+        panner.pan.value = 1;
+        document.querySelector("#RightFrequency").oninput = function () {
+          oscillator1.frequency.value = +this.value;
+        };
+        document.getElementById("start-right").setAttribute("disabled", "");
+      }
+      function stop() {
+        oscillator.disconnect();
+        oscillator1.disconnect();
+        document.getElementById("start-left").removeAttribute("disabled", "");
+        document.getElementById("start-right").removeAttribute("disabled", "");
+      }
     </script>
-</body>
-
+  </body>
 </html>
